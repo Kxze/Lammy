@@ -1,0 +1,27 @@
+{
+    "port": 3000,
+    "database": {
+        "type": "mysql",
+        "host": "localhost",
+        "port": 3306,
+        "username": "root",
+        "password": "Emiolo123*",
+        "database": "lammy",
+        "synchronize": true,
+        "logging": false,
+        "entities": [
+            "dist/entity/**/*.js"
+        ],
+        "migrations": [
+            "dist/migration/**/*.js"
+        ],
+        "subscribers": [
+            "dist/subscriber/**/*.js"
+        ],
+        "cli": {
+            "entitiesDir": "src/entity",
+            "migrationsDir": "src/migration",
+            "subscribersDir": "src/subscriber"
+        }
+    }
+}
