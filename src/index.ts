@@ -20,10 +20,13 @@ loadConfig(path.join(__dirname, "../config.json"))
     return loadRoutes(config, path.join(__dirname, "/routes"), params);
   })
   .then((config) => {
+    logger.info("Loading database...");
     createConnection(config.database)
       .then(connection => {
         app.listen(config.port, () => {
-          logger.log("info", "Listening on port 3000");
+          logger.info("Listening on port 3000");
         });
-      });
-  });
+      })
+      .catch(logger.error);
+  })
+  .catch(logger.error);

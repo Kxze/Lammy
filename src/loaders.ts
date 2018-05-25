@@ -5,6 +5,7 @@ import { IRouteParams, ISettings } from "./types";
 
 export const loadRoutes = (config: ISettings, directory: string, params: IRouteParams): Promise<ISettings> => {
   return new Promise((resolve, reject) => {
+    logger.info("Loading routes...");
     fs.readdir(directory, (err, files) => {
       if (err) { return reject(err); }
 
@@ -21,6 +22,7 @@ export const loadRoutes = (config: ISettings, directory: string, params: IRouteP
 
 export const loadConfig = (file: string): Promise<ISettings> => {
   return new Promise((resolve, reject) => {
+    logger.info("Loading configuration file...");
     fs.readFile(file, "utf8", (err, fileData) => {
       if (err) { return reject(err); }
       try {
