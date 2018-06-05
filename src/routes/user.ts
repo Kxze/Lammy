@@ -1,6 +1,5 @@
 import * as bcrypt from "bcrypt";
 import { User } from "../entity";
-import { checkBody } from "../middleware";
 import { IRouteParams } from "../types";
 
 export default ({ app, config, connection, logger }: IRouteParams) => {
