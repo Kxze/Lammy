@@ -10,7 +10,7 @@ export const loadRoutes = (config: ISettings, directory: string, params: IRouteP
       if (err) { return reject(err); }
 
       files
-        .filter((file) => file.endsWith(".js"))
+        .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
         .forEach((file) => {
           require(path.join(directory, file)).default(params);
           logger.info("Loaded route " + file);

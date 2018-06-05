@@ -1,3 +1,4 @@
+import * as bcrypt from "bcrypt";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -6,13 +7,22 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  firstName!: string;
+  @Column({
+    nullable: false,
+    unique: true,
+  })
+  username!: string;
+
+  @Column({
+    nullable: false,
+  })
+  password!: string;
 
   @Column()
-  lastName!: string;
-
-  @Column()
-  age!: number;
-
+  lastLogin!: Date;
+  
+  async verifyPassword(password: string) {
+    const isValid = await bcrypt.compare(password, this.password);
+    return isValid;
+  }
 }

@@ -1,3 +1,4 @@
+import * as bodyParser from "body-parser";
 import express from "express";
 import * as path from "path";
 import "reflect-metadata";
@@ -8,25 +9,27 @@ import { IRouteParams } from "./types";
 
 const app = express();
 
-// Sets up and starts server
-loadConfig(path.join(__dirname, "../config.json"))
-  .then((config) => {
-    const params: IRouteParams = {
-      app,
-      config,
-      logger,
-    };
+app.use(bodyParser.json());
 
-    return loadRoutes(config, path.join(__dirname, "/routes"), params);
-  })
-  .then((config) => {
-    logger.info("Loading database...");
-    createConnection(config.database)
-      .then(connection => {
-        app.listen(config.port, () => {
-          logger.info("Listening on port 3000");
-        });
-      })
-      .catch(logger.error);
-  })
+// Sets up and starts server
+const main = async () => {
+  const config = await loadConfig(path.join(__dirname, "../config.json"));
+  const connection = await createConnection(config.database);
+
+  const params: IRouteParams = {
+    app,
+    config,
+    connection,
+    logger,
+  };
+
+  await loadRoutes(config, path.join(__dirname, "/routes"), params);
+  app.listen(config.port, () => {
+    logger.info("Listening on port 3000");
+  });
+};
+
+main()
   .catch(logger.error);
+
+export default app;
