@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import * as passport from "passport";
+import passport from "passport";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { User } from "../entity";
 import { IRouteParams } from "../types";
