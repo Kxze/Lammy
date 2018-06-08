@@ -11,7 +11,7 @@
         "host": "localhost",
         "port": 3306,
         "username": "root",
-        "password": "Emiolo123*",
+        "password": "",
         "database": "lammy",
         "synchronize": true,
         "logging": false,
