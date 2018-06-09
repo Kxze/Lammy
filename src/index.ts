@@ -14,36 +14,36 @@ app.use(bodyParser.json());
 
 // Sets up and starts server
 const main = async () => {
-  const config = await loadConfig(path.join(__dirname, "../config.json"));
-  const connection = await createConnection(config.database);
-  const upload = multer({ dest: __dirname + "/../uploads/" });
+	const config = await loadConfig(path.join(__dirname, "../config.json"));
+	const connection = await createConnection(config.database);
+	const upload = multer({ dest: __dirname + "/../uploads/" });
 
-  const params: IRouteParams = {
-    app,
-    config,
-    connection,
-    logger,
-    upload,
-  };
+	const params: IRouteParams = {
+		app,
+		config,
+		connection,
+		logger,
+		upload,
+	};
 
-  await loadRoutes(config, path.join(__dirname, "/routes"), params);
+	await loadRoutes(config, path.join(__dirname, "/routes"), params);
 
-  app.use((err: any, req: Request, res: Response, next: any) => {
-    logger.warn(err.message);
+	app.use((err: any, req: Request, res: Response, next: any) => {
+		logger.warn(err.message);
 
-    if (process.env.NODE_ENV === "development") {
-      return res.status(500).send({ error: err.message });
-    } else {
-      return res.sendStatus(500);
-    }
-  });
+		if (process.env.NODE_ENV === "development") {
+			return res.status(500).send({ error: err.message });
+		} else {
+			return res.sendStatus(500);
+		}
+	});
 
-  app.listen(config.port, () => {
-    logger.info("Listening on port 3000");
-  });
+	app.listen(config.port, () => {
+		logger.info("Listening on port 3000");
+	});
 };
 
 main()
-  .catch(logger.error);
+	.catch(logger.error);
 
 export default app;

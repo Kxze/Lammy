@@ -4,23 +4,23 @@ import { Connection, ConnectionOptions } from "typeorm";
 import { Logger } from "winston";
 
 export interface IRouteParams {
-    app: Express;
-    logger: Logger;
-    config: ISettings;
-    connection: Connection;
-    upload: MulterInstance;
+	app: Express;
+	logger: Logger;
+	config: ISettings;
+	connection: Connection;
+	upload: MulterInstance;
 }
 
 export interface ISecurity {
-    rounds: string | number;
-    encryptionKey: string;
-    issuer: string;
-    expiration: string;
+	rounds: string | number;
+	encryptionKey: string;
+	issuer: string;
+	expiration: string;
 }
 
 export interface ISettings {
-    port: string;
-    library: string;
-    database: ConnectionOptions;
-    security: ISecurity;
+	port: string;
+	library: string;
+	database: ConnectionOptions;
+	security: ISecurity;
 }

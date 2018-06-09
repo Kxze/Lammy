@@ -5,29 +5,29 @@ import { Artist } from "./Artist";
 @Entity()
 export class Song {
 
-  @PrimaryGeneratedColumn()
-  id!: number;
+	@PrimaryGeneratedColumn()
+	id!: number;
 
-  @Column()
-  location!: string;
+	@Column()
+	location!: string;
 
-  @Column({
-      nullable: true,
-  })
-  sortName!: string;
+	@Column({
+		nullable: true,
+	})
+	sortName!: string;
 
-  @Column()
-  name!: string;
+	@Column()
+	name!: string;
 
-  @Column({
-      nullable: true,
-  })
-  trackNo!: number;
+	@Column({
+		nullable: true,
+	})
+	trackNo!: number;
 
-  @ManyToMany(type => Artist, (artist) => artist.songs)
-  artists!: Artist[];
+	@ManyToMany(type => Artist, (artist) => artist.songs)
+	artists!: Artist[];
 
-  @ManyToMany(type => Album, (album) => album.songs)
-  albums!: Album[];
+	@ManyToMany(type => Album, (album) => album.songs)
+	albums!: Album[];
 
 }

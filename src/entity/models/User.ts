@@ -5,25 +5,25 @@ import { Song } from "./Song";
 @Entity()
 export class User {
 
-  @PrimaryGeneratedColumn()
-  id!: number;
+	@PrimaryGeneratedColumn()
+	id!: number;
 
-  @Column({
-    nullable: false,
-    unique: true,
-  })
-  username!: string;
+	@Column({
+		nullable: false,
+		unique: true,
+	})
+	username!: string;
 
-  @Column({
-    nullable: false,
-  })
-  password!: string;
+	@Column({
+		nullable: false,
+	})
+	password!: string;
 
-  @Column()
-  lastLogin!: Date;
+	@Column()
+	lastLogin!: Date;
 
-  async verifyPassword(password: string) {
-    const isValid = await bcrypt.compare(password, this.password);
-    return isValid;
-  }
+	async verifyPassword(password: string) {
+		const isValid = await bcrypt.compare(password, this.password);
+		return isValid;
+	}
 }
