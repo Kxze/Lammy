@@ -1,4 +1,5 @@
 import { Express } from "express";
+import { Instance as MulterInstance } from "multer";
 import { Connection, ConnectionOptions } from "typeorm";
 import { Logger } from "winston";
 
@@ -7,6 +8,7 @@ export interface IRouteParams {
     logger: Logger;
     config: ISettings;
     connection: Connection;
+    upload: MulterInstance;
 }
 
 export interface ISecurity {
@@ -18,6 +20,7 @@ export interface ISecurity {
 
 export interface ISettings {
     port: string;
+    library: string;
     database: ConnectionOptions;
     security: ISecurity;
 }

@@ -1,7 +1,7 @@
 import * as winston from "winston";
 
 const myFormat = winston.format.printf(info => {
-  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+  return `${info.timestamp} [${info.level}] ${info.message}`;
 });
 
 export const logger = winston.createLogger({

@@ -1,5 +1,6 @@
 import * as bodyParser from "body-parser";
-import express from "express";
+import express, { Request, Response } from "express";
+import multer from "multer";
 import * as path from "path";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
@@ -15,15 +16,23 @@ app.use(bodyParser.json());
 const main = async () => {
   const config = await loadConfig(path.join(__dirname, "../config.json"));
   const connection = await createConnection(config.database);
+  const upload = multer({ dest: __dirname + "/../uploads/" });
 
   const params: IRouteParams = {
     app,
     config,
     connection,
     logger,
+    upload,
   };
 
   await loadRoutes(config, path.join(__dirname, "/routes"), params);
+
+  app.use((err: any, req: Request, res: Response, next: any) => {
+    logger.warn(err.message);
+    return res.sendStatus(200);
+  });
+
   app.listen(config.port, () => {
     logger.info("Listening on port 3000");
   });
