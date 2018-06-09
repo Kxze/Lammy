@@ -44,6 +44,6 @@ const main = async () => {
 };
 
 main()
-	.catch(logger.error);
+	.catch((err) => logger.error(err.message));
 
 export default app;
