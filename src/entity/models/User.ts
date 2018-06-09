@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Song } from "./Song";
 
 @Entity()
 export class User {
@@ -20,7 +21,7 @@ export class User {
 
   @Column()
   lastLogin!: Date;
-  
+
   async verifyPassword(password: string) {
     const isValid = await bcrypt.compare(password, this.password);
     return isValid;

@@ -25,11 +25,9 @@ export class Song {
   trackNo!: number;
 
   @ManyToMany(type => Artist, (artist) => artist.songs)
-  @JoinTable()
   artists!: Artist[];
 
   @ManyToMany(type => Album, (album) => album.songs)
-  @JoinTable()
   albums!: Album[];
 
 }

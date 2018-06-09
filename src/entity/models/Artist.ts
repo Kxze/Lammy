@@ -9,7 +9,12 @@ export class Artist {
   id!: number;
 
   @Column({
-      nullable: true,
+    nullable: true,
+  })
+  mbid!: string;
+
+  @Column({
+    nullable: true,
   })
   sortName!: string;
 
@@ -17,8 +22,8 @@ export class Artist {
   name!: string;
 
   @Column({
-      nullable: true,
-      type: "text",
+    nullable: true,
+    type: "text",
   })
   description!: string;
 
