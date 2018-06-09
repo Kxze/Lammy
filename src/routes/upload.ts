@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { wrap } from "express-promise-wrap";
+import ffmpeg from "fluent-ffmpeg";
 import * as fs from "fs";
 import * as path from "path";
 import { Connection } from "typeorm";
 import { isNumber, promisify } from "util";
 import ytdl from "ytdl-core";
 import { Album, Artist, Song } from "../entity";
+import { logger } from "../logger";
 import { IRouteParams, ISettings } from "../types";
 
 const rename = promisify(fs.rename);
@@ -24,7 +26,7 @@ export default ({ app, connection, config, upload }: IRouteParams) => {
 			}
 
 			const destination = formatFileNameWithPath(config, artist, name);
-			await rename(req.file.path, destination);
+			await rename(req.file.path, destination + ".mp3");
 
 			await createSong(name, dbAlbum, dbArtist, destination, connection);
 
@@ -49,7 +51,9 @@ export default ({ app, connection, config, upload }: IRouteParams) => {
 		}
 
 		const destination = formatFileNameWithPath(config, artist, name);
-		await downloadAndWriteMp3(req.body.url, destination);
+		await downloadAndWriteAudio(req.body.url, destination);
+		await convertToMp3(destination + ".webM", destination + ".mp3");
+		await promisify(fs.unlink)(destination + ".webM");
 
 		await createSong(name, dbAlbum, dbArtist, destination, connection);
 		return res.send();
@@ -58,22 +62,56 @@ export default ({ app, connection, config, upload }: IRouteParams) => {
 };
 
 function formatFileNameWithPath(config: ISettings, artist: string, name: string) {
-	return path.join(config.library, `${artist} - ${name}.mp3`);
+	return path.join(config.library, `${artist} - ${name}`);
 }
 
-function downloadAndWriteMp3(url: string, destination: string) {
+function downloadAndWriteAudio(url: string, destination: string) {
 	return new Promise((resolve, reject) => {
-		const file = fs.createWriteStream(destination);
-		const stream = ytdl(url).pipe(file);
+		const file = fs.createWriteStream(destination + ".webM");
+
+		const stream = ytdl(url, {
+			quality: "highestaudio",
+			filter: "audioonly",
+		}).pipe(file);
+
+		stream.on("open", () => {
+			logger.debug("Downloading started...");
+		});
 
 		stream.on("finish", () => {
+			logger.debug("Downloading finished.");
 			resolve();
 		});
 
 		stream.on("error", (err) => {
+			logger.error(err);
 			reject(err);
 		});
-	}); 
+	});
+}
+
+function convertToMp3(file: string, destination: string) {
+	return new Promise((resolve, reject) => {
+		const command = ffmpeg(fs.createReadStream(file))
+			.output(fs.createWriteStream(destination))
+			.toFormat("mp3")
+			.withNoVideo()
+			.withAudioFrequency(44100)
+			.withAudioChannels(2)
+			.withAudioBitrate("320k")
+			.on("start", (commandLine: string) => {
+				logger.debug("Spawned FFMPEG with command: " + commandLine);
+			})
+			.on("error", (err) => {
+				logger.error(err);
+				reject(err);
+			})
+			.on("end", () => {
+				logger.debug("Transcoding finished!");
+				resolve();
+			})
+			.run();
+	});
 }
 
 async function getDbMetadata(connection: Connection, album: string, artist: string, name: string) {
