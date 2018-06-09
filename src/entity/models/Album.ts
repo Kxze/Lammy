@@ -11,6 +11,11 @@ export class Album {
   @Column({
       nullable: true,
   })
+  mbid!: string;
+
+  @Column({
+      nullable: true,
+  })
   sortName!: string;
 
   @Column()
@@ -23,7 +28,6 @@ export class Album {
   description!: string;
 
   @ManyToMany(type => Artist, (artist) => artist.albums)
-  @JoinTable()
   artists!: Artist[];
 
   @ManyToMany(type => Song, (song) => song.albums)
