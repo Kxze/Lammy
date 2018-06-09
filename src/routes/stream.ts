@@ -44,4 +44,16 @@ export default ({ app, connection }: IRouteParams) => {
 		}
 	});
 
+	app.get("/song/:id/download", async (req, res) => {
+		const song = await connection.getRepository(Song).findOneById(req.params.id, { relations: ["artists"] });
+		if (!song) { return res.status(404).send({ message: "Could not find song with id " + req.params.id }); }
+
+		const artist = song.artists[0].name;
+		const name = song.name;
+		res.set("Content-Disposition", `attachment;filename=${artist} - ${name}.mp3`);
+		res.set("Content-Type", "application/octet-stream");
+		
+		fs.createReadStream(song.location).pipe(res);
+	});
+
 };
