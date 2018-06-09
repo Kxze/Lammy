@@ -30,7 +30,12 @@ const main = async () => {
 
   app.use((err: any, req: Request, res: Response, next: any) => {
     logger.warn(err.message);
-    return res.sendStatus(200);
+
+    if (process.env.NODE_ENV === "development") {
+      return res.status(500).send({ error: err.message });
+    } else {
+      return res.sendStatus(500);
+    }
   });
 
   app.listen(config.port, () => {
