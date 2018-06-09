@@ -1,11 +1,12 @@
 import * as fs from "fs";
+import Server from "upnpserver";
 import { promisify } from "util";
 import { Song } from "../entity";
 import { IRouteParams } from "../types";
 
 const fileStats = promisify(fs.stat);
 
-export default ({ app, connection }: IRouteParams) => {
+export default ({ app, connection, config }: IRouteParams) => {
 
 	app.get("/song/:id", async (req, res) => {
 		if (typeof req.headers.range !== "string") { return res.sendStatus(400); }
@@ -56,4 +57,14 @@ export default ({ app, connection }: IRouteParams) => {
 		fs.createReadStream(song.location).pipe(res);
 	});
 
+	startDLNAServer([config.library]);
 };
+
+function startDLNAServer(libraries: string[]) {
+	const server = new Server({
+		log: true,
+		logLevel: "ERROR",
+	}, libraries.map(path => ({ path, type: "music" })));
+
+	server.start();
+}

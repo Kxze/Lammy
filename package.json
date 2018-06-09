@@ -25,6 +25,7 @@
       "swagger-express-middleware": "^1.0.0-alpha.12",
       "typeorm": "^0.1.21",
       "typescript": "^2.8.3",
+      "upnpserver": "^3.0.2",
       "winston": "github:winstonjs/winston#master",
       "ytdl-core": "^0.20.4"
    },
