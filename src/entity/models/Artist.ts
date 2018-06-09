@@ -11,11 +11,6 @@ export class Artist {
 	@Column({
 		nullable: true,
 	})
-	mbid!: string;
-
-	@Column({
-		nullable: true,
-	})
 	sortName!: string;
 
 	@Column()

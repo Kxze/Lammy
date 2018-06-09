@@ -11,11 +11,6 @@ export class Album {
 	@Column({
 		nullable: true,
 	})
-	mbid!: string;
-
-	@Column({
-		nullable: true,
-	})
 	sortName!: string;
 
 	@Column()
