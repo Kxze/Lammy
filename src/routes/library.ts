@@ -51,7 +51,7 @@ export default ({ app, connection, upload, config }: IRouteParams) => {
 		}
 
 		dbArtist.name = dbArtist.name || artist;
-		dbArtist.albums = dbArtist.albums ? [...dbArtist.albums, dbAlbum] : [];
+		dbArtist.albums = dbArtist.albums ? [...dbArtist.albums, dbAlbum] : [dbAlbum];
 		await connection.getRepository(Artist).save(dbArtist);
 
 		const songRepository = await connection.getRepository(Song);
