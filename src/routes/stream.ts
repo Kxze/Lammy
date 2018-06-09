@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { Song } from "../entity";
 import { IRouteParams } from "../types";
 
 const fileStats = (path: string): Promise<fs.Stats> => {
@@ -10,12 +11,14 @@ const fileStats = (path: string): Promise<fs.Stats> => {
   });
 };
 
-export default ({ app }: IRouteParams) => {
+export default ({ app, connection }: IRouteParams) => {
 
   app.get("/song/:id", async (req, res) => {
     if (typeof req.headers.range !== "string") { return res.sendStatus(400); }
+    const song = await connection.getRepository(Song).findOneById(req.params.id);
+    if (!song) { return res.status(404).send({ message: "Could not find song with id " + req.params.id }); }
 
-    const path = __dirname + "/../../music/Sophie - Ponyboy.mp3";
+    const path = song.location;
     const stat = await fileStats(path);
     const fileSize = stat.size;
     const range = req.headers.range;
