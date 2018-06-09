@@ -1,15 +1,9 @@
 import * as fs from "fs";
+import { promisify } from "util";
 import { Song } from "../entity";
 import { IRouteParams } from "../types";
 
-const fileStats = (path: string): Promise<fs.Stats> => {
-  return new Promise((resolve, reject) => {
-    fs.stat(path, (err, stats) => {
-      if (err) { return reject(err); }
-      return resolve(stats);
-    });
-  });
-};
+const fileStats = promisify(fs.stat);
 
 export default ({ app, connection }: IRouteParams) => {
 
