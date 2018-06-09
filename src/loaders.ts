@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import Server from "upnpserver";
 import { promisify } from "util";
 import { logger } from "./logger";
 import { IRouteParams, ISettings } from "./types";
@@ -34,3 +35,13 @@ export const loadConfig = async (file: string) => {
 		return undefined;
 	}
 };
+
+export function startDLNAServer(libraries: string[]) {
+	const server = new Server({
+		log: true,
+		logLevel: "ERROR",
+	}, libraries.map(libraryPath => ({ path: libraryPath, type: "music" })));
+
+	server.start();
+	return server;
+}

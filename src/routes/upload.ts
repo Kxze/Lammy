@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { wrap } from "express-promise-wrap";
 import ffmpeg from "fluent-ffmpeg";
 import * as fs from "fs";
+import NodeID3 from "node-id3";
 import * as path from "path";
 import { Connection } from "typeorm";
 import { isNumber, promisify } from "util";
@@ -12,7 +13,7 @@ import { IRouteParams, ISettings } from "../types";
 
 const rename = promisify(fs.rename);
 
-export default ({ app, connection, config, upload }: IRouteParams) => {
+export default ({ app, connection, config, upload, DLNAServer }: IRouteParams) => {
 
 	app.post("/song/upload", upload.single("file"), wrap(async (req: Request, res: Response) => {
 		if (!req.body || !req.file) { return res.sendStatus(400); }
@@ -55,11 +56,29 @@ export default ({ app, connection, config, upload }: IRouteParams) => {
 		await convertToMp3(destination + ".webM", destination + ".mp3");
 		await promisify(fs.unlink)(destination + ".webM");
 
+		await writeID3Tags(name, dbAlbum.name, dbArtist.name, destination + ".mp3");
+
 		await createSong(name, dbAlbum, dbArtist, destination, connection);
 		return res.send();
 	});
 
 };
+
+function writeID3Tags(name: string, album: string, artist: string, file: string) {
+	return new Promise((resolve, reject) => {
+		const tags = {
+			title: name,
+			album,
+			artist,
+		};
+
+		NodeID3.write(tags, file, (err: any) => {
+			if (err) { reject(err); }
+
+			resolve();
+		});
+	});
+}
 
 function formatFileNameWithPath(config: ISettings, artist: string, name: string) {
 	return path.join(config.library, `${artist} - ${name}`);

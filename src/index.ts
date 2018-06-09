@@ -4,7 +4,7 @@ import multer from "multer";
 import * as path from "path";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { loadConfig, loadRoutes } from "./loaders";
+import { loadConfig, loadRoutes, startDLNAServer } from "./loaders";
 import { logger } from "./logger";
 import { IRouteParams } from "./types";
 
@@ -17,6 +17,7 @@ const main = async () => {
 	const config = await loadConfig(path.join(__dirname, "../config.json"));
 	const connection = await createConnection(config.database);
 	const upload = multer({ dest: __dirname + "/../uploads/" });
+	const DLNAServer = startDLNAServer([config.library]);
 
 	const params: IRouteParams = {
 		app,
@@ -24,6 +25,7 @@ const main = async () => {
 		connection,
 		logger,
 		upload,
+		DLNAServer,
 	};
 
 	await loadRoutes(config, path.join(__dirname, "/routes"), params);

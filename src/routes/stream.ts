@@ -57,14 +57,4 @@ export default ({ app, connection, config }: IRouteParams) => {
 		fs.createReadStream(song.location).pipe(res);
 	});
 
-	startDLNAServer([config.library]);
 };
-
-function startDLNAServer(libraries: string[]) {
-	const server = new Server({
-		log: true,
-		logLevel: "ERROR",
-	}, libraries.map(path => ({ path, type: "music" })));
-
-	server.start();
-}

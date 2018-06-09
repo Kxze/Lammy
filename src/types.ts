@@ -9,6 +9,7 @@ export interface IRouteParams {
 	config: ISettings;
 	connection: Connection;
 	upload: MulterInstance;
+	DLNAServer: any;
 }
 
 export interface ISecurity {
