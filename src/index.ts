@@ -17,7 +17,7 @@ const main = async () => {
 	const config = await loadConfig(path.join(__dirname, "../config.json"));
 	const connection = await createConnection(config.database);
 	const upload = multer({ dest: __dirname + "/../uploads/" });
-	const DLNAServer = startDLNAServer([config.library]);
+	const DLNAServer = startDLNAServer(config.library);
 
 	const params: IRouteParams = {
 		app,

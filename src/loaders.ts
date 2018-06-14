@@ -8,6 +8,8 @@ import { IRouteParams, ISettings } from "./types";
 const readDir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
 
+export let upnpServer: any;
+
 export const loadRoutes = async (config: ISettings, directory: string, params: IRouteParams) => {
 	try {
 		logger.info("Loading routes...");
@@ -36,12 +38,16 @@ export const loadConfig = async (file: string) => {
 	}
 };
 
-export function startDLNAServer(libraries: string[]) {
-	const server = new Server({
-		log: true,
-		logLevel: "ERROR",
-	}, libraries.map(libraryPath => ({ path: libraryPath, type: "music" })));
+export function startDLNAServer(library: string) {
+	upnpServer = new Server({
+		name: "Lammy Server",
+		log: false,
+	}, [{
+		path: library,
+		type: "music",
+	}]);
+	
+	upnpServer.start();
 
-	server.start();
-	return server;
+	return upnpServer;
 }
