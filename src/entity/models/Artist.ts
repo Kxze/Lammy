@@ -1,9 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Album } from "./Album";
 import { Song } from "./Song";
 
 @Entity()
-export class Artist {
+export class Artist extends BaseEntity {
 
 	@PrimaryGeneratedColumn()
 	id!: number;

@@ -1,9 +1,8 @@
 import * as bcrypt from "bcrypt";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Song } from "./Song";
+import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
 
 	@PrimaryGeneratedColumn()
 	id!: number;
