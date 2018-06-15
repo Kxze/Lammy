@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 // Sets up and starts server
 const main = async () => {
-	const config = await loadConfig(path.join(__dirname, "../config.json"));
+	const config = await loadConfig();
 	const connection = await createConnection(config.database);
 	const upload = multer({ dest: __dirname + "/../uploads/" });
 	const DLNAServer = startDLNAServer(config.library);
@@ -45,7 +45,9 @@ const main = async () => {
 	});
 };
 
-main()
-	.catch((err) => logger.error(err.message));
+if (process.env.NODE_ENV !== "test") {
+	main()
+		.catch((err) => logger.error(err.message));
+}
 
-export default app;
+export default main;

@@ -26,8 +26,10 @@ export const loadRoutes = async (config: ISettings, directory: string, params: I
 	}
 };
 
-export const loadConfig = async (file: string) => {
+export const loadConfig = async () => {
 	try {
+		const file = path.join(__dirname, process.env.NODE_ENV === "test" ? "../config.test.json" : "../config.json");
+
 		logger.info("Loading configuration file...");
 		const fileData = await readFile(file, "utf8");
 
@@ -41,7 +43,8 @@ export const loadConfig = async (file: string) => {
 export function startDLNAServer(library: string) {
 	upnpServer = new Server({
 		name: "Lammy Server",
-		log: false,
+		log: true,
+		logLevel: "DEBUG",
 	}, [{
 		path: library,
 		type: "music",

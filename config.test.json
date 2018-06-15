@@ -1,0 +1,23 @@
+{
+  "port": 3000,
+  "library": "/home/rodrigo/Music/",
+  "security": {
+      "rounds": 10,
+      "encryptionKey": "###---->CHANGETHIS<----###",
+      "issuer": "rammy",
+      "expiration": "30 days"
+  },
+  "database": {
+      "type": "mysql",
+      "host": "localhost",
+      "port": 3306,
+      "username": "root",
+      "password": "",
+      "database": "lammyTest",
+      "synchronize": true,
+      "logging": false,
+      "entities": [
+          "src/entity/models/*.ts"
+      ]
+  }
+}
