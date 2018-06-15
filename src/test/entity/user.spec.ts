@@ -1,9 +1,6 @@
 import * as bcrypt from "bcrypt";
 import { expect } from "chai";
-import { readFile } from "fs";
-import { promisify } from "util";
 import { User } from "../../entity";
-import { ISettings } from "../../types";
 
 describe("User entity", () => {
 	let user: User;
