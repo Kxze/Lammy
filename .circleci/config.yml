@@ -33,12 +33,12 @@ jobs:
       - run:
           name: Generate code coverage
           command: './node_modules/.bin/nyc report --reporter=text-lcov'
+      - store_artifacts:
+          path: results.xml
       - store_test_results:
           path: results.xml
-          prefix: tests
       - store_artifacts:
           path: coverage
-          prefix: coverage
 workflows:
   version: 2
   build_and_test_1:
