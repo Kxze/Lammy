@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/test-circleci
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node:10
       - image: tkuchiki/delayed-mysql
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
