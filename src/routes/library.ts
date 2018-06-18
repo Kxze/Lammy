@@ -21,6 +21,7 @@ export default ({ app, connection, upload, config }: IRouteParams) => {
 			});
 		} else {
 			data = await connection.getRepository(Song).find({
+				select: ["id", "name", "sortName"],
 				relations: ["artists", "albums"],
 			});
 		}
