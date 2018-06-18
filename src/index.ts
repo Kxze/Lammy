@@ -7,10 +7,12 @@ import { createConnection } from "typeorm";
 import { loadConfig, loadRoutes, startDLNAServer } from "./loaders";
 import { logger } from "./logger";
 import { IRouteParams } from "./types";
+import cors from "cors";
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // Sets up and starts server
 const main = async () => {
